@@ -6,13 +6,13 @@ spec:
   params:
   - name: pipelineName
     description: The name of the pipeline to be executed
-	default: storm-tracker-application-pipeline	
+    default: storm-tracker-application-pipeline	
   - name: pathToContext
     description: The path to the build context, used by Kaniko - within the workspace
-	default: .
+    default: .
   - name: pathToDeploymentFile
     description: The path to the yaml file describe how to deploy the application. 
-	default: deployment.yaml
+    default: deployment.yaml
   - name: pathToDockerfile
     description: The path to the docker image build file
     default: Dockerfile
