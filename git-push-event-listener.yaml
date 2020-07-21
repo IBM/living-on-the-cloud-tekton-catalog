@@ -7,6 +7,6 @@ spec:
   triggers:
   - name: pullrequest-build-and-deploy
     template:
-      name: sampleapp-build-and-deploy
+      name: ibm-cloud-trigger-template
     bindings:
-    - name: sampleapp-build-and-deploy
+    - name: gitlab-trigger-binding
