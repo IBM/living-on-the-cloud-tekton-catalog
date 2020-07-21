@@ -51,7 +51,7 @@ spec:
     spec:
       serviceAccountName: $(params.serviceAccountId)
       pipelineRef:
-        name: $(params.pipelineName)
+        name: storm-tracker-application-pipeline
       resources:
       - name: git-repo
         resourceSpec:
