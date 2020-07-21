@@ -1,11 +1,11 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: deploy-application
+  name: deploy-image-to-ibm-cloud
 spec:
   resources:
     inputs:
-      - name: source
+      - name: git-repo
         type: git
   params:
     - name: pathToContext
@@ -14,9 +14,12 @@ spec:
     - name: pathToYamlFile
       description: The path to the yaml file to deploy within the git source
       default: deploy.yaml
-    - name: imageUrl
+    - name: containerRepoUrl
       description: Url of image repository
-      default: url
+    - name: imageNamespace
+      description: Url of image repository
+    - name: imageName
+      description: Url of image repository
     - name: imageTag
       description: Tag of the images to be used.
       default: "latest"
