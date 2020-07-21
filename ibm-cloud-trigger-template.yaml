@@ -60,7 +60,7 @@ spec:
           - name: revision
             value: $(params.commitId)
           - name: url
-            value: $(params.repoUrl)
+            value: $(params.gitRepoUrl)
       params:
       - name: DEPLOYMENT
         value: $(params.imageName)
@@ -73,4 +73,4 @@ spec:
     metadata:
       name: ibm-cr-secret
       annotations:
-        tekton.dev/docker-0: $(params.imageUrl)
+        tekton.dev/docker-0: $(params.containerRepoUrl)
