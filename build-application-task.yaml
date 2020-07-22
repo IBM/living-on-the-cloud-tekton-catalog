@@ -5,7 +5,7 @@ metadata:
 spec:
   resources:
     inputs:
-      - name: source
+      - name: git-repo
         type: git
   params:
     - name: pathToContext
@@ -14,8 +14,12 @@ spec:
     - name: pathToDockerfile
       description: The path to the dockerfile to build
       default: Dockerfile
-    - name: imageUrl
-      description: value should be like - us.icr.io/test_namespace/builtImageApp
+    - name: containerRepoUrl
+      description: Base url to the container repo
+    - name: containerRepoNamespace
+      description: Namespace image is being stored under
+    - name: deploymentImage
+      description: Name of image to be deployed
     - name: imageTag
       description: Tag to apply to the built image
   steps:
@@ -24,12 +28,12 @@ spec:
       command:
         - "ls"
       args:
-        - "$(resources.inputs.source.path)"
+        - "$(resources.inputs.git-repo.path)"
     - name: build-and-push
       image: gcr.io/kaniko-project/executor
       command:
         - /kaniko/executor
       args:
         - "--dockerfile=$(params.pathToDockerfile)"
-        - "--destination=$(params.imageUrl):$(params.imageTag)"
-        - "--context=$(resources.inputs.source.path)/$(params.pathToContext)/"
+        - "--destination=$(params.containerRepoUrl)/$(params.containerRepoNamespace)/$(params.deploymentImage):$(params.imageTag)"
+        - "--context=$(resources.inputs.git-repo.path)/$(params.pathToContext)/"
