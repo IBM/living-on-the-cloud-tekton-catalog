@@ -43,11 +43,13 @@ spec:
     description: The service account id the pipeline is run under
   - name: apiKey
     description: Service Account API KEY for interacting with IBM Cloud
+  - name: buildNumber
+    default: ['devops.cloud.ibm.com/build-number']
   resourcetemplates:
   - apiVersion: tekton.dev/v1beta1
     kind: PipelineRun
     metadata:
-      generateName: $(params.imageName)-build-['devops.cloud.ibm.com/build-number']
+      generateName: $(params.imageName)-build-$(params.buildNumber)
     spec:
       serviceAccountName: $(params.serviceAccountId)
       pipelineRef:
