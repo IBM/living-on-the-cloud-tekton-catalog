@@ -43,6 +43,12 @@ spec:
     description: The service account id the pipeline is run under
   - name: apiKey
     description: Service Account API KEY for interacting with IBM Cloud
+  - name: gitUser
+    description: The revision to build and deploy.
+  - name: gitApiKey
+    description: The service account id the pipeline is run under
+  - name: gitUrl
+    description: Service Account API KEY for interacting with IBM Cloud
   resourcetemplates:
   - apiVersion: tekton.dev/v1beta1
     kind: PipelineRun
@@ -74,3 +80,13 @@ spec:
       name: ibm-cr-secret
       annotations:
         tekton.dev/docker-0: $(params.containerRepoUrl)
+  - apiVersion: v1
+    kind: Secret
+    type: kubernetes.io/basic-auth
+    metadata:
+      name: gitlab-secret
+      annotations:
+        tekton.dev/git-0: $(params.gitUrl)
+    stringData:
+      username: $(params.gitUser)
+      password: $(params.gitApiKey)
