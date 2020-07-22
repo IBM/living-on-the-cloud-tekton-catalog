@@ -44,11 +44,11 @@ spec:
           valueFrom:
             secretKeyRef:
               name: secure-properties
-              key: API-KEY
+              key: apiKey
       command: ["/bin/bash", "-c"]
       args:
         - set -e -o pipefail;
           ibmcloud login -a $(params.apiUrl) -r $(params.clusterRegion) --apikey $APIKEY;
           export IKS_BETA_VERSION=1;
           ibmcloud ks cluster config -c $(params.nameOfCluster);
-          kubectl apply -f $(resources.inputs.source.path)/$(params.pathToContext)/$(params.pathToDeploymentFile)
+          kubectl apply -f $(resources.inputs.git-repo.path)/$(params.pathToContext)/$(params.pathToDeploymentFile)
