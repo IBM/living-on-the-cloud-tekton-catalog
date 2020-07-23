@@ -26,7 +26,7 @@ spec:
       command:
         - "echo"
       args:
-        - "$(params.containerRepoUrl)/$(resources.inputs.git-repo.path)/$(params.pathToContext)/$(params.containerRepoUrl)/$(params.containerRepoNamespace)/$(params.deploymentImage):$(params.imageTag)"
+        - "$(params.containerRepoUrl)/$(resources.inputs.git-repo.path)/$(params.pathToContext)/$(params.containerRepoUrl)/$(params.containerRepoNamespace)/$(params.deploymentImage):$BUILD_NUMBE"
     - name: build-and-push
       env:
         - name: BUILD_NUMBER
