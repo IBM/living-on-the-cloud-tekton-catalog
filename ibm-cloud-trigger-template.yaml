@@ -68,8 +68,34 @@ spec:
           - name: url
             value: $(params.gitRepoUrl)
       params:
-      - name: DEPLOYMENT
-        value: $(params.imageName)
+      - name: pathToContext
+        value: $(params.pathToContext)
+      - name: pathToDeploymentFile
+        value: $(params.pathToDeploymentFile)
+      - name: pathToDockerfile
+        value: $(params.pathToDockerfile)
+      - name: apiUrl
+        value: $(params.apiUrl)
+      - name: containerRepoUrl
+        value: $(params.containerRepoUrl)
+      - name: containerRepoNamespace
+        value: $(params.containerRepoNamespace)
+      - name: deploymentImage
+        value: $(params.deploymentImage)
+      - name: imageTag
+        value: $(params.imageTag)
+      - name: nameOfCluster
+        value: $(params.nameOfCluster)
+      - name: clusterRegion
+        value: $(params.clusterRegion)
+      - name: mvnGoals
+        value: $(params.mvnGoals)
+      - name: serviceAccountId
+        value: $(params.serviceAccountId)
+      - name: apiKey
+        value: $(params.apiKey)
+
+
   - apiVersion: v1
     stringData:
       username: iamapikey
