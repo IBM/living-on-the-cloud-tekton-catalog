@@ -89,9 +89,8 @@ spec:
       - name: clusterRegion
         value: $(params.clusterRegion)
       - name: mvnGoals
+        type: array
         value: $(params.mvnGoals)
-      - name: apiKey
-        value: $(params.apiKey)
   - apiVersion: v1
     stringData:
       username: iamapikey
