@@ -90,8 +90,6 @@ spec:
         value: $(params.clusterRegion)
       - name: mvnGoals
         value: $(params.mvnGoals)
-      - name: serviceAccountId
-        value: $(params.serviceAccountId)
       - name: apiKey
         value: $(params.apiKey)
   - apiVersion: v1
