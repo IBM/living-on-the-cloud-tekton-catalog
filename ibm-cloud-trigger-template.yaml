@@ -31,10 +31,6 @@ spec:
     description: The number of cluster to deploy the image to
   - name: clusterRegion
     description: The region where the cluster resides
-  - name: mvnGoals
-    description: The Maven goal(s) to run
-    type: array
-    default: ["package"]
   - name: gitRepoUrl
     description: The git repo url to the repository of the application that is being built.
   - name: commitId
