@@ -37,3 +37,4 @@ spec:
         - "--dockerfile=$(params.pathToDockerfile)"
         - "--destination=$(params.containerRepoUrl)/$(params.containerRepoNamespace)/$(params.deploymentImage):$(params.imageTag)"
         - "--context=$(resources.inputs.git-repo.path)/$(params.pathToContext)/"
+        - "--verbosity=trace"
