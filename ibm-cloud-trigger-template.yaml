@@ -94,8 +94,6 @@ spec:
         value: $(params.serviceAccountId)
       - name: apiKey
         value: $(params.apiKey)
-
-
   - apiVersion: v1
     stringData:
       username: iamapikey
