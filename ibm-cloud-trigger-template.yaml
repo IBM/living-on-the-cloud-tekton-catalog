@@ -67,6 +67,13 @@ spec:
             value: $(params.commitId)
           - name: url
             value: $(params.gitRepoUrl)
+      params:
+      - name: pathToContext
+        value: $(params.pathToContext)
+      - name: pathToDeploymentFile
+        value: $(params.pathToDeploymentFile)
+      - name: pathToDockerfile
+        value: $(params.pathToDockerfile)
   - apiVersion: v1
     stringData:
       username: iamapikey
