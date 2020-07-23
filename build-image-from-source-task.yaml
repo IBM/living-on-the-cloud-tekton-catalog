@@ -28,7 +28,7 @@ spec:
       command:
         - "echo"
       args:
-        - "$(resources.inputs.git-repo.path)"
+        - "$(resources.inputs.git-repo.path)/$(params.pathToContext)"
     - name: build-and-push
       image: gcr.io/kaniko-project/executor:debug
       command:
