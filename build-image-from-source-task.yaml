@@ -36,4 +36,4 @@ spec:
       args:
         - "--dockerfile=$(params.pathToDockerfile)"
         - "--destination=$(params.containerRepoUrl)/$(params.containerRepoNamespace)/$(params.deploymentImage):$(params.imageTag)"
-        - "--context=git://$(resources.inputs.git-repo.path)/$(params.pathToContext)"
+        - "--context=dir://$(resources.inputs.git-repo.path)/$(params.pathToContext)"
