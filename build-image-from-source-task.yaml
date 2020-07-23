@@ -20,8 +20,6 @@ spec:
       description: Namespace image is being stored under
     - name: deploymentImage
       description: Name of image to be deployed
-    - name: imageTag
-      description: Tag to apply to the built image
   steps:
     - name: list-src
       image: alpine
@@ -30,10 +28,15 @@ spec:
       args:
         - "$(params.containerRepoUrl)/$(resources.inputs.git-repo.path)/$(params.pathToContext)/$(params.containerRepoUrl)/$(params.containerRepoNamespace)/$(params.deploymentImage):$(params.imageTag)"
     - name: build-and-push
+      env:
+        - name: BUILD_NUMBER
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.annotations['devops.cloud.ibm.com/build-number']    
       image: gcr.io/kaniko-project/executor:debug
       command:
         - /kaniko/executor
       args:
         - "--dockerfile=$(params.pathToDockerfile)"
-        - "--destination=$(params.containerRepoUrl)/$(params.containerRepoNamespace)/$(params.deploymentImage):$(params.imageTag)"
+        - "--destination=$(params.containerRepoUrl)/$(params.containerRepoNamespace)/$(params.deploymentImage):$BUILD_NUMBER"
         - "--context=dir://$(resources.inputs.git-repo.path)/$(params.pathToContext)"
