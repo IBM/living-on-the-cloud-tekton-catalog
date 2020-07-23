@@ -74,6 +74,23 @@ spec:
         value: $(params.pathToDeploymentFile)
       - name: pathToDockerfile
         value: $(params.pathToDockerfile)
+      - name: apiUrl
+        value: $(params.apiUrl)
+      - name: containerRepoUrl
+        value: $(params.containerRepoUrl)
+      - name: containerRepoNamespace
+        value: $(params.containerRepoNamespace)
+      - name: deploymentImage
+        value: $(params.deploymentImage)
+      - name: imageTag
+        value: $(params.imageTag)
+      - name: nameOfCluster
+        value: $(params.nameOfCluster)
+      - name: clusterRegion
+        value: $(params.clusterRegion)
+      - name: mvnGoals
+        type: array
+        value: $(params.mvnGoals)
   - apiVersion: v1
     stringData:
       username: iamapikey
