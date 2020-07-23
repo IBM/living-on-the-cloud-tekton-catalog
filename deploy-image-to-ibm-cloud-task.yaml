@@ -22,20 +22,23 @@ spec:
       description: Namespace image is being stored under
     - name: deploymentImage
       description: Name of image to be deployed
-    - name: imageTag
-      description: Tag to apply to the built image
     - name: clusterRegion
       description: Region where cluster is located
     - name: apiUrl
       description: API URL for interacting with IBM Cloud
   steps:
     - name: update-yaml
+      env:
+        - name: BUILD_NUMBER
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.annotations['devops.cloud.ibm.com/build-number'] 
       image: alpine
       command: ["sed"]
       args:
         - "-i"
         - "-e"
-        - "s;IMAGE;$(params.containerRepoUrl)/$(params.containerRepoNamespace)/$(params.deploymentImage):$(params.imageTag);g"
+        - "s;IMAGE;$(params.containerRepoUrl)/$(params.containerRepoNamespace)/$(params.deploymentImage):$BUILD_NUMBER;g"
         - "$(resources.inputs.git-repo.path)/$(params.pathToContext)/$(params.pathToDeploymentFile)"
     - name: deploy-app
       image: ibmcom/pipeline-base-image
