@@ -26,15 +26,14 @@ spec:
     - name: list-src
       image: alpine
       command:
-        - "ls"
+        - "echo"
       args:
         - "$(resources.inputs.git-repo.path)"
     - name: build-and-push
-      image: gcr.io/kaniko-project/executor
+      image: gcr.io/kaniko-project/executor:debug
       command:
         - /kaniko/executor
       args:
         - "--dockerfile=$(params.pathToDockerfile)"
         - "--destination=$(params.containerRepoUrl)/$(params.containerRepoNamespace)/$(params.deploymentImage):$(params.imageTag)"
-        - "--context=$(params.pathToContext)"
-        - "--verbosity=trace"
+        - "--context=git://$(resources.inputs.git-repo.path)/$(params.pathToContext)"
