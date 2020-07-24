@@ -20,6 +20,8 @@ spec:
       description: Namespace image is being stored under
     - name: deploymentImage
       description: Name of image to be deployed
+    - name: mvnGoals
+      description: Goals to be run during maven build step
   steps:
     - name: list-src
       image: alpine
@@ -32,6 +34,12 @@ spec:
         - "echo"
       args:
         - "$(params.containerRepoUrl)/$(resources.inputs.git-repo.path)/$(params.pathToContext)/$(params.containerRepoUrl)/$(params.containerRepoNamespace)/$(params.deploymentImage):$(BUILD_NUMBER)"
+    - name: mvn
+      image: gcr.io/cloud-builders/mvn
+      workingDir: $(resources.inputs.git-repo.path)/$(params.pathToContext)
+      command: ["/usr/bin/mvn"]
+      args:
+        - "$(params.mvnGoals)"
     - name: build-and-push
       image: gcr.io/kaniko-project/executor:debug
       env:
