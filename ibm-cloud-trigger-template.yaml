@@ -49,7 +49,7 @@ spec:
     metadata:
       generateName: $(params.deploymentImage)-build-
     spec:
-      serviceAccountName: $(params.serviceAccountId)
+      serviceAccountName: service-account
       pipelineRef:
         name: storm-tracker-application-pipeline
       resources:
