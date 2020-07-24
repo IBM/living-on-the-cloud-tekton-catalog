@@ -31,14 +31,14 @@ spec:
       command:
         - "echo"
       args:
-        - "$(params.containerRepoUrl)/$(resources.inputs.git-repo.path)/$(params.pathToContext)/$(params.containerRepoUrl)/$(params.containerRepoNamespace)/$(params.deploymentImage):$BUILD_NUMBE"
+        - "$(params.containerRepoUrl)/$(resources.inputs.git-repo.path)/$(params.pathToContext)/$(params.containerRepoUrl)/$(params.containerRepoNamespace)/$(params.deploymentImage):$BUILD_NUMBER"
     - name: build-and-push
+      image: gcr.io/kaniko-project/executor:debug
       env:
         - name: BUILD_NUMBER
           valueFrom:
             fieldRef:
               fieldPath: metadata.annotations['devops.cloud.ibm.com/build-number']    
-      image: gcr.io/kaniko-project/executor:debug
       command:
         - /kaniko/executor
       args:
