@@ -31,7 +31,7 @@ spec:
       command:
         - "echo"
       args:
-        - "$(params.containerRepoUrl)/$(resources.inputs.git-repo.path)/$(params.pathToContext)/$(params.containerRepoUrl)/$(params.containerRepoNamespace)/$(params.deploymentImage):$BUILD_NUMBER"
+        - "$(params.containerRepoUrl)/$(resources.inputs.git-repo.path)/$(params.pathToContext)/$(params.containerRepoUrl)/$(params.containerRepoNamespace)/$(params.deploymentImage):$(BUILD_NUMBER)"
     - name: build-and-push
       image: gcr.io/kaniko-project/executor:debug
       env:
@@ -43,5 +43,5 @@ spec:
         - /kaniko/executor
       args:
         - "--dockerfile=$(params.pathToDockerfile)"
-        - "--destination=$(params.containerRepoUrl)/$(params.containerRepoNamespace)/$(params.deploymentImage):$BUILD_NUMBER"
+        - "--destination=$(params.containerRepoUrl)/$(params.containerRepoNamespace)/$(params.deploymentImage):$(BUILD_NUMBER)"
         - "--context=dir://$(resources.inputs.git-repo.path)/$(params.pathToContext)"
