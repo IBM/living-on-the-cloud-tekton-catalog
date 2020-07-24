@@ -21,6 +21,7 @@ spec:
     - name: deploymentImage
       description: Name of image to be deployed
     - name: mvnGoals
+      type: array
       description: Goals to be run during maven build step
   steps:
     - name: list-src
