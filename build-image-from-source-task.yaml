@@ -42,7 +42,7 @@ spec:
       args:
         - "$(params.mvnGoals)"
     - name: build-and-push
-      image: gcr.io/kaniko-project/executor:debug
+      image: gcr.io/kaniko-project/executor
       env:
         - name: BUILD_NUMBER
           valueFrom:
