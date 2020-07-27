@@ -43,7 +43,7 @@ spec:
     - name: deploy-app
       image: ibmcom/pipeline-base-image
       env:
-        - name: APIKEY
+        - name: IBMCLOUD_API_KEY
           valueFrom:
             secretKeyRef:
               name: secure-properties
@@ -51,7 +51,7 @@ spec:
       command: ["/bin/bash", "-c"]
       args:
         - set -e -o pipefail;
-          ibmcloud login -a $(params.apiUrl) -r $(params.clusterRegion) --apikey $APIKEY;
+          ibmcloud login -a $(params.apiUrl) -r $(params.clusterRegion);
           export IKS_BETA_VERSION=1;
           ibmcloud ks cluster config -c $(params.nameOfCluster);
           kubectl apply -f $(resources.inputs.git-repo.path)/$(params.pathToContext)/$(params.pathToDeploymentFile)
