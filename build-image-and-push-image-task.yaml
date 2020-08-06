@@ -1,0 +1,34 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: build-image-and-push-image
+spec:
+  workspaces:
+  - name: source
+  params:
+    - name: path-to-context
+      description: The path to the build context, used by Kaniko - within the workspace
+      default: .
+    - name: path-to-dockerfile
+      description: The path to the dockerfile to build
+      default: Dockerfile
+    - name: container-repo-url
+      description: Base url to the container repo
+    - name: container-repo-namespace
+      description: Namespace image is being stored under
+    - name: deployment-image
+      description: Name of image to be deployed
+  steps:
+    - name: build-and-push
+      image: gcr.io/kaniko-project/executor
+      env:
+        - name: BUILD_NUMBER
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.annotations['devops.cloud.ibm.com/build-number']    
+      command:
+        - /kaniko/executor
+      args:
+        - "--dockerfile=$(params.path-to-dockerfile)"
+        - "--destination=$(params.container-repo-url)/$(params.container-repo-namespace)/$(params.deployment-image):$(BUILD_NUMBER)"
+        - "--context=dir:///workspace/source/$(params.path-to-context)"

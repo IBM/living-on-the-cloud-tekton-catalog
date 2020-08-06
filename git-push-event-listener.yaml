@@ -3,7 +3,7 @@ kind: EventListener
 metadata:
   name: git-push-event-listener
 spec:
-  serviceAccountName: sampleapp
+  serviceAccountName: service-account
   triggers:
   - name: pullrequest-build-and-deploy
     template:

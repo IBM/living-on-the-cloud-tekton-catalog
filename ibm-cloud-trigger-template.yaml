@@ -1,102 +1,97 @@
-apiVersion: triggers.tekton.dev/v1beta1
+apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerTemplate
 metadata:
   name: ibm-cloud-trigger-template
 spec:
   params:
-  - name: pipelineName
-    description: The name of the pipeline to be executed
-    default: storm-tracker-application-pipeline
-  - name: pathToContext
-    description: The path to the build context, used by Kaniko - within the workspace
+  - name: path-to-context
+    description: The path to the build context, used by Kaniko
     default: .
-  - name: pathToDeploymentFile
+  - name: path-to-deployment-file
     description: The path to the yaml file describe how to deploy the application. 
     default: deployment.yaml
-  - name: pathToDockerfile
+  - name: path-to-dockerfile
     description: The path to the docker image build file
     default: Dockerfile
-  - name: apiUrl
+  - name: api-url
     description: The api url for interacting with ibm cloud
     default: cloud.ibm.com
-  - name: containerRepoUrl
+  - name: container-repo-url
     description: Base url for container repository
-  - name: containerRepoNamespace
+    default: us.icr.io
+  - name: container-repo-namespace
     description: Namespace where image is located
-  - name: deploymentImage
+  - name: deployment-image
     description: Name of image to be deployed
-  - name: nameOfCluster
+  - name: name-of-cluster
     description: The number of cluster to deploy the image to
-  - name: clusterRegion
+  - name: cluster-region
     description: The region where the cluster resides
-  - name: gitRepoUrl
-    description: The git repo url to the repository of the application that is being built.
-  - name: commitId
+    default: us-south
+  - name: git-repo-url
+    description: URL to the git repo to be cloned
+  - name: commit-id
     description: The revision to build and deploy.
-  - name: serviceAccountId
+  - name: git-access-token
     description: The service account id the pipeline is run under
-  - name: apiKey
-    description: Service Account API KEY for interacting with IBM Cloud
-  - name: gitUser
-    description: The revision to build and deploy.
-  - name: gitApiKey
-    description: The service account id the pipeline is run under
-  - name: gitUrl
-    description: Service Account API KEY for interacting with IBM Cloud
+  - name: apikey
+    description: Service Account API KEY for interacting with IBM Cloud note the specific syntax of apikey has special relevance to many IBM Cloud resources, so should not be changed.
   resourcetemplates:
   - apiVersion: tekton.dev/v1beta1
     kind: PipelineRun
     metadata:
-      generateName: $(params.deploymentImage)-build-
+      generateName: build-pipeline-
     spec:
       serviceAccountName: service-account
       pipelineRef:
-        name: storm-tracker-application-pipeline
-      resources:
-      - name: git-repo
-        resourceSpec:
-          type: git
-          params:
-          - name: revision
-            value: $(params.commitId)
-          - name: url
-            value: $(params.gitRepoUrl)
+        name: build-pipeline
       params:
-      - name: pathToContext
-        value: $(params.pathToContext)
-      - name: pathToDeploymentFile
-        value: $(params.pathToDeploymentFile)
-      - name: pathToDockerfile
-        value: $(params.pathToDockerfile)
-      - name: apiUrl
-        value: $(params.apiUrl)
-      - name: containerRepoUrl
-        value: $(params.containerRepoUrl)
-      - name: containerRepoNamespace
-        value: $(params.containerRepoNamespace)
-      - name: deploymentImage
-        value: $(params.deploymentImage)
-      - name: nameOfCluster
-        value: $(params.nameOfCluster)
-      - name: clusterRegion
-        value: $(params.clusterRegion)
+      - name: path-to-context
+        value: $(params.path-to-context)
+      - name: path-to-deployment-file
+        value: $(params.path-to-deployment-file)
+      - name: path-to-dockerfile
+        value: $(params.path-to-dockerfile)
+      - name: api-url
+        value: $(params.api-url)
+      - name: container-repo-url
+        value: $(params.container-repo-url)
+      - name: container-repo-namespace
+        value: $(params.container-repo-namespace)
+      - name: deployment-image
+        value: $(params.deployment-image)
+      - name: name-of-cluster
+        value: $(params.name-of-cluster)
+      - name: cluster-region
+        value: $(params.cluster-region)
+      - name: git-access-token
+        value: $(params.git-access-token)
+      - name: git-repo-url
+        value: $(params.git-repo-url)
+      - name: commit-id
+        value: $(params.commit-id)
+      workspaces:
+        - name: git-repo
+          persistentVolumeClaim:
+            claimName: $(uid)-pvc
   - apiVersion: v1
     stringData:
       username: iamapikey
-      password: $(params.apiKey)
+      password: $(params.apikey)
     kind: Secret
     type: kubernetes.io/basic-auth
     metadata:
       name: ibm-cr-secret
       annotations:
-        tekton.dev/docker-0: $(params.containerRepoUrl)
+        tekton.dev/docker-0: $(params.container-repo-url)
   - apiVersion: v1
-    kind: Secret
-    type: kubernetes.io/basic-auth
+    kind: PersistentVolumeClaim
     metadata:
-      name: gitlab-secret
-      annotations:
-        tekton.dev/git-0: $(params.gitUrl)
-    stringData:
-      username: $(params.gitUser)
-      password: $(params.gitApiKey)
+      name: $(uid)-pvc
+    spec:
+      resources:
+        requests:
+          storage: 5Gi
+      volumeMode: Filesystem
+      accessModes:
+        - ReadWriteOnce
