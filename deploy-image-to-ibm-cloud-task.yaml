@@ -12,33 +12,17 @@ spec:
       default: deployment.yaml
     - name: name-of-cluster
       description: Name of cluster to deploy image to
-    - name: container-repo-url
-      description: Base url to the container repo
-    - name: container-repo-namespace
-      description: Namespace image is being stored under
-    - name: deployment-image
-      description: Name of image to be deployed
     - name: cluster-region
       description: Region where cluster is located
     - name: api-url
       description: API URL for interacting with IBM Cloud
       default: cloud.ibm.com
+    - name: cluster-namespace
+      description: The namespace being used within the k8s cluster
+      default: default
   workspaces:
     - name: source
   steps:
-    - name: update-yaml
-      env:
-        - name: BUILD_NUMBER
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.annotations['devops.cloud.ibm.com/build-number'] 
-      image: alpine:3.12
-      command: ["sed"]
-      args:
-        - "-i"
-        - "-e"
-        - "s;IMAGE;$(params.container-repo-url)/$(params.container-repo-namespace)/$(params.deployment-image):$(BUILD_NUMBER);g"
-        - "$(workspaces.source.path)/$(params.path-to-context)/$(params.path-to-deployment-file)"
     - name: deploy-app
       image: ibmcom/pipeline-base-image:2.7
       env:
@@ -53,4 +37,4 @@ spec:
           ibmcloud login -a $(params.api-url) -r $(params.cluster-region);
           export IKS_BETA_VERSION=1;
           ibmcloud ks cluster config -c $(params.name-of-cluster);
-          kubectl apply -f $(workspaces.source.path)/$(params.path-to-context)/$(params.path-to-deployment-file);
+          kubectl apply -n $(params.cluster-namespace) -f $(workspaces.source.path)/$(params.path-to-context)/$(params.path-to-deployment-file);

@@ -18,6 +18,9 @@ spec:
       description: Namespace image is being stored under
     - name: deployment-image
       description: Name of image to be deployed
+  results:
+    - name: full-image-path
+      description: The full path to the newly created image
   steps:
     - name: build-and-push
       image: gcr.io/kaniko-project/executor
@@ -25,10 +28,21 @@ spec:
         - name: BUILD_NUMBER
           valueFrom:
             fieldRef:
-              fieldPath: metadata.annotations['devops.cloud.ibm.com/build-number']    
+              fieldPath: metadata.annotations['devops.cloud.ibm.com/build-number']
       command:
         - /kaniko/executor
       args:
         - "--dockerfile=$(params.path-to-dockerfile)"
         - "--destination=$(params.container-repo-url)/$(params.container-repo-namespace)/$(params.deployment-image):$(BUILD_NUMBER)"
         - "--context=dir:///workspace/source/$(params.path-to-context)"
+    - name: print-full-image-path
+      image: bash:latest
+      env:
+        - name: BUILD_NUMBER
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.annotations['devops.cloud.ibm.com/build-number']
+      script: |
+        #!/usr/bin/env bash
+        $(params.container-repo-url)/$(params.container-repo-namespace)/$(params.deployment-image):$(BUILD_NUMBER) | tee /tekton/results/full-image-path
+
