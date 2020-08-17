@@ -44,5 +44,4 @@ spec:
               fieldPath: metadata.annotations['devops.cloud.ibm.com/build-number']
       script: |
         #!/usr/bin/env bash
-        $(params.container-repo-url)/$(params.container-repo-namespace)/$(params.deployment-image):$(BUILD_NUMBER) | tee /tekton/results/full-image-path
-
+        echo -n "$(params.container-repo-url)/$(params.container-repo-namespace)/$(params.deployment-image):${BUILD_NUMBER}" | tee /tekton/results/full-image-path;
